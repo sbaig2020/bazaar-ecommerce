@@ -114,18 +114,6 @@ bazaar_site/
     └── search_results.html
 ```
 
-## Next Steps
-
-Future enhancements planned for Bazaar include:
-
-1. Database integration (PostgreSQL or MongoDB)
-2. User authentication and accounts
-3. Order history and tracking
-4. Admin dashboard for product management
-5. Payment gateway integration
-6. Review and rating system
-7. Wishlist functionality
-8. Related products recommendations
 
 ## License
 
