@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+
+{% block title %}Your Shopping Cart | Bazaar{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row">
+        <!-- Shopping Cart Section -->
+        <div class="col-lg-9">
+            <div class="card amazon-card mb-3">
+                <div class="card-header bg-white">
+                    <h1 class="amazon-page-title">Shopping Cart</h1>
+                </div>
+                <div class="card-body">
+                    <div class="text-end mb-2">
+                        <small>Price</small>
+                    </div>
+                    
+                    {% if cart_items %}
+                        <div id="cart-items">
+                            {% for item in cart_items %}
+                                <div class="amazon-cart-item">
+                                    <div class="row">
+                                        <div class="col-md-2 col-3">
+                                            <a href="{{ url_for('product_detail', product_id=item.product.id) }}">
+                                                {% if item.product.images %}
+                                                    <img src="{{ item.product.images[0] }}" class="img-fluid amazon-cart-image" alt="{{ item.product.title }}" onerror="this.src='https://dummyimage.com/100x100/000/fff.jpg&text=No+Image'">
+                                                {% else %}
+                                                    <img src="https://dummyimage.com/100x100/000/fff.jpg&text=No+Image" class="img-fluid amazon-cart-image" alt="{{ item.product.title }}">
+                                                {% endif %}
+                                            </a>
+                                        </div>
+                                        <div class="col-md-7 col-6">
+                                            <h5 class="amazon-cart-item-title">
+                                                <a href="{{ url_for('product_detail', product_id=item.product.id) }}" class="text-decoration-none text-dark">
+                                                    {{ item.product.title }}
+                                                </a>
+                                            </h5>
+                                            <div class="amazon-cart-availability text-success">In Stock</div>
+                                            <div class="amazon-prime mb-1">
+                                                <i class="fas fa-check"></i> Prime - FREE delivery
+                                            </div>
+                                            {% if item.product.variant %}
+                                                <div class="amazon-cart-variant small">
+                                                    {{ item.product.variant }}
+                                                </div>
+                                            {% endif %}
+                                            <div class="mt-2 d-flex align-items-center">
+                                                <div class="amazon-quantity-selector">
+                                                    <select class="form-select form-select-sm" data-item-id="{{ item.id }}">
+                                                        {% for i in range(1, 11) %}
+                                                            <option value="{{ i }}" {% if i == item.quantity %}selected{% endif %}>{{ i }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="amazon-cart-item-actions ms-3">
+                                                    <button class="btn btn-link text-danger p-0 delete-item" data-item-id="{{ item.id }}">Delete</button>
+                                                    <span class="mx-2 text-muted">|</span>
+                                                    <button class="btn btn-link p-0">Save for later</button>
+                                                    <span class="mx-2 text-muted">|</span>
+                                                    <button class="btn btn-link p-0">Compare with similar items</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 col-3 text-end">
+                                            <div class="amazon-cart-item-price">₹{{ (item.product.bazaar_price * item.quantity)|int }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% if not loop.last %}
+                                    <hr class="my-3">
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="text-end border-top pt-3 mt-3">
+                            <h5 class="amazon-subtotal">
+                                Subtotal ({{ cart_items|sum(attribute='quantity') }} items): 
+                                <span class="amazon-subtotal-price">₹{{ total|int }}</span>
+                            </h5>
+                        </div>
+                    {% else %}
+                        <div class="amazon-empty-cart text-center py-5">
+                            <i class="fas fa-shopping-cart fa-4x mb-3 text-muted"></i>
+                            <h2>Your Amazon Cart is empty</h2>
+                            <p class="mb-4">Your Shopping Cart lives to serve. Give it purpose — fill it with groceries, clothing, household supplies, electronics, and more.</p>
+                            <a href="{{ url_for('products') }}" class="btn amazon-add-to-cart-btn">Continue shopping</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Saved for Later -->
+            <div class="card amazon-card mb-3">
+                <div class="card-header bg-white">
+                    <h2 class="amazon-section-title">Saved for later (3 items)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="amazon-cart-item">
+                        <div class="row">
+                            <div class="col-md-2 col-3">
+                                <img src="https://dummyimage.com/100x100/000/fff.jpg&text=Saved+Item" class="img-fluid amazon-cart-image" alt="Saved Product">
+                            </div>
+                            <div class="col-md-7 col-6">
+                                <h5 class="amazon-cart-item-title">
+                                    <a href="#" class="text-decoration-none text-dark">
+                                        Sample Saved Product
+                                    </a>
+                                </h5>
+                                <div class="amazon-cart-availability text-success">In Stock</div>
+                                <div class="amazon-prime mb-1">
+                                    <i class="fas fa-check"></i> Prime - FREE delivery
+                                </div>
+                                <div class="mt-2">
+                                    <button class="btn btn-sm amazon-add-to-cart-btn">Move to Cart</button>
+                                    <button class="btn btn-link text-danger p-0 ms-2">Delete</button>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-3 text-end">
+                                <div class="amazon-cart-item-price">₹2,499</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recently Viewed Items & Recommended Products -->
+            <div class="amazon-carousel">
+                <h2 class="amazon-section-title">Your recently viewed items</h2>
+                <div class="row">
+                    {% for i in range(6) %}
+                        <div class="col-6 col-md-4 col-lg-2 mb-3">
+                            <div class="amazon-carousel-card">
+                                <a href="#">
+                                    <img src="https://dummyimage.com/150x150/000/fff.jpg&text=Item+{{ i+1 }}" class="amazon-carousel-image" alt="Recently viewed item">
+                                    <div class="mt-2">
+                                        <div class="amazon-product-title">Recently Viewed Product {{ i+1 }}</div>
+                                        <div class="amazon-product-price">₹{{ (1000 * (i+1))|int }}</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Order Summary Section -->
+        <div class="col-lg-3">
+            <div class="card amazon-card mb-3 amazon-checkout-card">
+                <div class="card-body">
+                    {% if cart_items %}
+                        <div class="amazon-checkout-summary">
+                            <div class="amazon-subtotal mb-3">
+                                Subtotal ({{ cart_items|sum(attribute='quantity') }} items): 
+                                <span class="amazon-subtotal-price">₹{{ total|int }}</span>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" value="" id="giftCheck">
+                                <label class="form-check-label" for="giftCheck">
+                                    This order contains a gift
+                                </label>
+                            </div>
+                            <a href="{{ url_for('checkout') }}" class="btn amazon-proceed-to-checkout-btn mb-2">Proceed to Buy</a>
+                            <div class="amazon-emi-options">
+                                <div class="small">EMI Available</div>
+                                <a href="#" class="amazon-checkout-link">EMI options</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Recommendations -->
+            <div class="amazon-card card mb-3">
+                <div class="card-header bg-white">
+                    <h5 class="m-0">Inspired by your shopping trends</h5>
+                </div>
+                <div class="card-body p-2">
+                    <div class="amazon-side-recommendations">
+                        {% for i in range(4) %}
+                            <div class="amazon-side-recommendation-item p-2">
+                                <div class="row g-0">
+                                    <div class="col-4">
+                                        <img src="https://dummyimage.com/60x60/000/fff.jpg&text=Rec+{{ i+1 }}" class="img-fluid" alt="Recommendation">
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="small amazon-side-recommendation-title">Recommended Product {{ i+1 }}</div>
+                                        <div class="amazon-side-recommendation-price">₹{{ (500 * (i+1))|int }}</div>
+                                        <button class="btn btn-sm amazon-add-to-cart-btn mt-1">Add to Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if not loop.last %}
+                                <hr class="my-1">
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Delete item functionality
+        const deleteButtons = document.querySelectorAll('.delete-item');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const itemId = this.getAttribute('data-item-id');
+                if (confirm('Are you sure you want to remove this item from your cart?')) {
+                    // Here we would have AJAX call to remove item from cart
+                    const itemElement = this.closest('.amazon-cart-item');
+                    itemElement.remove();
+                    
+                    // Update cart count and total (this is a placeholder - actual implementation would depend on backend)
+                    updateCartTotal();
+                }
+            });
+        });
+        
+        // Quantity change functionality
+        const quantitySelectors = document.querySelectorAll('.amazon-quantity-selector select');
+        quantitySelectors.forEach(selector => {
+            selector.addEventListener('change', function() {
+                const itemId = this.getAttribute('data-item-id');
+                const quantity = this.value;
+                
+                // Here we would have AJAX call to update item quantity
+                console.log(`Updated item ${itemId} quantity to ${quantity}`);
+                
+                // Update cart total (this is a placeholder - actual implementation would depend on backend)
+                updateCartTotal();
+            });
+        });
+        
+        function updateCartTotal() {
+            // This function would be implemented to recalculate the cart total
+            console.log('Updating cart total...');
+        }
+    });
+</script>
+{% endblock %}

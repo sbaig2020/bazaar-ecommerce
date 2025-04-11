@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Bazaar - Your Online Shopping Destination{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Top Navigation Bar (Amazon style) -->
+    <nav class="navbar navbar-expand-lg amazon-navbar-top">
+        <div class="container-fluid">
+            <a class="navbar-brand amazon-logo" href="{{ url_for('home') }}">Bazaar</a>
+            
+            <!-- Search Bar -->
+            <form class="d-flex amazon-search-form mx-3" action="{{ url_for('search') }}" method="GET">
+                <div class="input-group">
+                    <input class="form-control amazon-search-input" type="search" name="q" placeholder="Search products" aria-label="Search">
+                    <button class="btn amazon-search-button" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item amazon-nav-dropdown">
+                        <a class="nav-link" href="#">
+                            <div class="amazon-nav-greeting">Hello, Sign in</div>
+                            <div>Account & Lists</div>
+                        </a>
+                    </li>
+                    <li class="nav-item amazon-nav-dropdown">
+                        <a class="nav-link" href="#">
+                            <div class="amazon-nav-greeting">Returns</div>
+                            <div>& Orders</div>
+                        </a>
+                    </li>
+                    <li class="nav-item position-relative">
+                        <a class="nav-link amazon-cart-icon" href="{{ url_for('cart') }}">
+                            <i class="fas fa-shopping-cart"></i> Cart
+                            <span class="amazon-cart-count">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Secondary Navigation -->
+    <nav class="navbar navbar-expand amazon-navbar-bottom">
+        <div class="container-fluid">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link amazon-all-button" href="#"><i class="fas fa-bars"></i> All</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('products') }}">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Today's Deals</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Best Sellers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">New Releases</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Customer Service</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="container py-4">
+        {% block content %}{% endblock %}
+    </div>
+    
+    <!-- Footer -->
+    <footer class="amazon-footer">
+        <div class="container">
+            <div class="amazon-footer-links">
+                <div class="amazon-footer-column">
+                    <h5>Get to Know Us</h5>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press Releases</a></li>
+                        <li><a href="#">Bazaar Science</a></li>
+                    </ul>
+                </div>
+                <div class="amazon-footer-column">
+                    <h5>Make Money with Us</h5>
+                    <ul>
+                        <li><a href="#">Sell on Bazaar</a></li>
+                        <li><a href="#">Sell Your Services</a></li>
+                        <li><a href="#">Bazaar Associates Program</a></li>
+                        <li><a href="#">Become an Affiliate</a></li>
+                    </ul>
+                </div>
+                <div class="amazon-footer-column">
+                    <h5>Payment Products</h5>
+                    <ul>
+                        <li><a href="#">Credit Card Reader</a></li>
+                        <li><a href="#">Shop with Points</a></li>
+                        <li><a href="#">Reload Your Balance</a></li>
+                        <li><a href="#">Gift Cards</a></li>
+                    </ul>
+                </div>
+                <div class="amazon-footer-column">
+                    <h5>Let Us Help You</h5>
+                    <ul>
+                        <li><a href="#">Your Account</a></li>
+                        <li><a href="#">Shipping Rates & Policies</a></li>
+                        <li><a href="#">Returns & Replacements</a></li>
+                        <li><a href="#">Help & Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="amazon-footer-bottom">
+                <p>&copy; 2025 Bazaar. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

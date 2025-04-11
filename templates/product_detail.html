@@ -1,0 +1,449 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.title }} | Bazaar{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-3">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb small">
+            <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('products', category=product.category) }}">{{ product.category|title }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.title|truncate(30) }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Left Column - Images -->
+        <div class="col-md-5 mb-4">
+            <div class="amazon-product-detail mb-3">
+                <div class="row">
+                    <!-- Thumbnails -->
+                    <div class="col-2 d-none d-md-block">
+                        {% if product.images %}
+                            {% for image in product.images %}
+                                <div class="mb-2">
+                                    <img src="{{ image }}" class="amazon-thumbnail {% if loop.first %}active{% endif %}" 
+                                         alt="{{ product.title }}" data-image="{{ image }}" 
+                                         onerror="this.src='https://dummyimage.com/40x40/000/fff.jpg&text=No+Image'">
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="mb-2">
+                                <img src="https://dummyimage.com/40x40/000/fff.jpg&text=No+Image" class="amazon-thumbnail active" 
+                                     alt="{{ product.title }}">
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Main Image -->
+                    <div class="col-12 col-md-10">
+                        <div id="mainImageContainer" class="text-center">
+                            {% if product.images %}
+                                <img id="mainImage" src="{{ product.images[0] }}" class="amazon-product-detail-image img-fluid" 
+                                     alt="{{ product.title }}" onerror="this.src='https://dummyimage.com/400x400/000/fff.jpg&text=No+Image'">
+                            {% else %}
+                                <img id="mainImage" src="https://dummyimage.com/400x400/000/fff.jpg&text=No+Image" 
+                                     class="amazon-product-detail-image img-fluid" alt="{{ product.title }}">
+                            {% endif %}
+                        </div>
+
+                        <!-- Mobile Carousel -->
+                        <div id="productImageCarousel" class="carousel slide d-md-none mt-3" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                {% if product.images %}
+                                    {% for image in product.images %}
+                                        <div class="carousel-item {% if loop.first %}active{% endif %}">
+                                            <img src="{{ image }}" class="d-block w-100" alt="{{ product.title }}"
+                                                 onerror="this.src='https://dummyimage.com/400x400/000/fff.jpg&text=No+Image'">
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="carousel-item active">
+                                        <img src="https://dummyimage.com/400x400/000/fff.jpg&text=No+Image" class="d-block w-100" alt="{{ product.title }}">
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#productImageCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#productImageCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Column - Product Details -->
+        <div class="col-md-4 mb-4">
+            <div class="amazon-product-detail h-100">
+                <h1 class="amazon-product-detail-title">{{ product.title }}</h1>
+                <div class="amazon-product-detail-brand">
+                    <a href="#">{{ product.brand }}</a>
+                </div>
+
+                <div class="amazon-product-rating mb-2">
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star-half-alt text-warning"></i>
+                    <span class="ms-1 text-primary">{{ (product.id * 17) % 1000 + 12 }} ratings</span>
+                </div>
+
+                <hr>
+
+                <div class="amazon-product-detail-price">₹{{ product.bazaar_price|int }}</div>
+                {% if product.original_price and product.bazaar_price < product.original_price %}
+                    <div class="amazon-product-detail-original">₹{{ product.original_price|int }}</div>
+                    <div class="text-success mb-2">You Save: ₹{{ (product.original_price - product.bazaar_price)|int }} ({{ ((product.original_price - product.bazaar_price) / product.original_price * 100)|int }}%)</div>
+                {% endif %}
+
+                <div class="amazon-prime mb-3">
+                    <i class="fas fa-check"></i> <span class="fw-bold">Prime</span> <i class="fas fa-check"></i> <span class="text-success">Free Delivery</span>
+                </div>
+
+                {% if product.description %}
+                    <div class="amazon-product-detail-description mb-4">
+                        {{ product.description }}
+                    </div>
+                {% endif %}
+
+                <!-- Product Features -->
+                <div class="amazon-product-detail-section">
+                    <h3>About this item</h3>
+                    <ul class="mb-4">
+                        {% if product.features %}
+                            {% for feature in product.features %}
+                                <li>{{ feature }}</li>
+                            {% endfor %}
+                        {% else %}
+                            <li>Premium quality {{ product.category }} product</li>
+                            <li>Comfortable fit and stylish design</li>
+                            <li>Durable material for long-lasting use</li>
+                            <li>Perfect for everyday wear</li>
+                            <li>Available in multiple sizes</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - Buy Box -->
+        <div class="col-md-3 mb-4">
+            <div class="amazon-product-detail h-100">
+                <div class="amazon-product-detail-price mb-1">₹{{ product.bazaar_price|int }}</div>
+                {% if product.original_price and product.bazaar_price < product.original_price %}
+                    <div class="amazon-product-detail-original">₹{{ product.original_price|int }}</div>
+                {% endif %}
+
+                <div class="amazon-prime mb-2">
+                    <i class="fas fa-check"></i> <span class="fw-bold">Prime</span>
+                </div>
+
+                <div class="text-success mb-3">
+                    <i class="fas fa-truck"></i> FREE Delivery by <span class="fw-bold">{{ (now() + timedelta(days=3)).strftime('%A, %b %d') }}</span>
+                </div>
+
+                <div class="mb-3">
+                    {% set in_stock = (product.id % 3 != 0) %}
+                    {% if in_stock %}
+                        <span class="text-success"><i class="fas fa-check-circle"></i> In Stock</span>
+                    {% else %}
+                        <span class="text-danger"><i class="fas fa-times-circle"></i> Out of Stock</span>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="quantity" class="form-label small">Quantity:</label>
+                    <select class="form-select form-select-sm w-auto" id="quantity" name="quantity">
+                        {% for i in range(1, 11) %}
+                            <option value="{{ i }}">{{ i }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="post">
+                    <input type="hidden" name="quantity" id="hidden_quantity" value="1">
+                    <button type="submit" class="amazon-add-to-cart-btn btn">
+                        <i class="fas fa-shopping-cart me-2"></i> Add to Cart
+                    </button>
+                </form>
+
+                <a href="{{ url_for('checkout') }}" class="amazon-buy-now-btn btn">
+                    <i class="fas fa-bolt me-2"></i> Buy Now
+                </a>
+
+                <hr>
+
+                <div class="small">
+                    <div class="mb-2">
+                        <i class="fas fa-lock me-1"></i> Secure transaction
+                    </div>
+                    <div class="mb-2">
+                        <strong>Ships from:</strong> Bazaar.com
+                    </div>
+                    <div class="mb-2">
+                        <strong>Sold by:</strong> {{ product.brand }} Official Store
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-secondary btn-sm">
+                        <i class="far fa-heart me-1"></i> Add to Wish List
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Information Tabs -->
+    <div class="amazon-product-detail mb-4">
+        <ul class="nav nav-tabs" id="productTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" 
+                        type="button" role="tab" aria-controls="description" aria-selected="true">Description</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="specifications-tab" data-bs-toggle="tab" data-bs-target="#specifications" 
+                        type="button" role="tab" aria-controls="specifications" aria-selected="false">Specifications</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" 
+                        type="button" role="tab" aria-controls="reviews" aria-selected="false">Customer Reviews</button>
+            </li>
+        </ul>
+        <div class="tab-content p-4" id="productTabContent">
+            <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                <h4>Product Description</h4>
+                <p>{{ product.description or 'Experience the perfect blend of style and comfort with this premium ' + product.category + ' product. Designed for everyday use, it features high-quality materials that ensure durability and long-lasting performance.' }}</p>
+                <p>The {{ product.brand }} {{ product.title }} is carefully crafted to meet the highest standards of quality and design. Perfect for any occasion, this versatile piece is a must-have addition to your collection.</p>
+            </div>
+            <div class="tab-pane fade" id="specifications" role="tabpanel" aria-labelledby="specifications-tab">
+                <h4>Product Specifications</h4>
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Brand</th>
+                            <td>{{ product.brand }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Model</th>
+                            <td>{{ product.title.split(' ')[0] }}-{{ product.id }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Color</th>
+                            <td>{{ product.title.split(' ')|random }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Material</th>
+                            <td>Premium Quality</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Weight</th>
+                            <td>{{ (product.id % 10) / 10 + 0.2 }} kg</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Country of Origin</th>
+                            <td>India</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                <h4>Customer Reviews</h4>
+                <div class="d-flex align-items-center mb-4">
+                    <div class="me-3">
+                        <div class="display-4">4.5</div>
+                        <div class="amazon-product-rating">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star-half-alt text-warning"></i>
+                        </div>
+                        <div>{{ (product.id * 17) % 1000 + 12 }} ratings</div>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex align-items-center mb-1">
+                            <div class="me-2">5 <i class="fas fa-star text-warning"></i></div>
+                            <div class="progress flex-grow-1" style="height: 8px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 72%;" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="ms-2 small text-muted">72%</div>
+                        </div>
+                        <div class="d-flex align-items-center mb-1">
+                            <div class="me-2">4 <i class="fas fa-star text-warning"></i></div>
+                            <div class="progress flex-grow-1" style="height: 8px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 19%;" aria-valuenow="19" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="ms-2 small text-muted">19%</div>
+                        </div>
+                        <div class="d-flex align-items-center mb-1">
+                            <div class="me-2">3 <i class="fas fa-star text-warning"></i></div>
+                            <div class="progress flex-grow-1" style="height: 8px;">
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: 5%;" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="ms-2 small text-muted">5%</div>
+                        </div>
+                        <div class="d-flex align-items-center mb-1">
+                            <div class="me-2">2 <i class="fas fa-star text-warning"></i></div>
+                            <div class="progress flex-grow-1" style="height: 8px;">
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 3%;" aria-valuenow="3" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="ms-2 small text-muted">3%</div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="me-2">1 <i class="fas fa-star text-warning"></i></div>
+                            <div class="progress flex-grow-1" style="height: 8px;">
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 1%;" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="ms-2 small text-muted">1%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sample Reviews -->
+                <div class="border-bottom pb-3 mb-3">
+                    <div class="d-flex mb-2">
+                        <div class="me-2"><i class="fas fa-user-circle fa-2x text-secondary"></i></div>
+                        <div>
+                            <div class="fw-bold">Customer1</div>
+                            <div class="text-muted small">Verified Purchase</div>
+                        </div>
+                    </div>
+                    <div class="amazon-product-rating mb-2">
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <span class="ms-2 fw-bold">Great product!</span>
+                    </div>
+                    <div class="text-muted small mb-2">Reviewed on {{ (now() - timedelta(days=5)).strftime('%d %B %Y') }}</div>
+                    <p>Absolutely love this product! The quality is excellent and it exceeded my expectations. Comfortable to wear and looks fantastic.</p>
+                    <div class="text-muted small">120 people found this helpful</div>
+                </div>
+                
+                <div class="border-bottom pb-3 mb-3">
+                    <div class="d-flex mb-2">
+                        <div class="me-2"><i class="fas fa-user-circle fa-2x text-secondary"></i></div>
+                        <div>
+                            <div class="fw-bold">Customer2</div>
+                            <div class="text-muted small">Verified Purchase</div>
+                        </div>
+                    </div>
+                    <div class="amazon-product-rating mb-2">
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="far fa-star text-warning"></i>
+                        <span class="ms-2 fw-bold">Good value for money</span>
+                    </div>
+                    <div class="text-muted small mb-2">Reviewed on {{ (now() - timedelta(days=15)).strftime('%d %B %Y') }}</div>
+                    <p>Solid product for the price point. The material is good quality and the fit is as expected. Would recommend to others looking for a reliable option.</p>
+                    <div class="text-muted small">78 people found this helpful</div>
+                </div>
+                
+                <div>
+                    <div class="d-flex mb-2">
+                        <div class="me-2"><i class="fas fa-user-circle fa-2x text-secondary"></i></div>
+                        <div>
+                            <div class="fw-bold">Customer3</div>
+                            <div class="text-muted small">Verified Purchase</div>
+                        </div>
+                    </div>
+                    <div class="amazon-product-rating mb-2">
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star-half-alt text-warning"></i>
+                        <i class="far fa-star text-warning"></i>
+                        <span class="ms-2 fw-bold">Decent product with minor issues</span>
+                    </div>
+                    <div class="text-muted small mb-2">Reviewed on {{ (now() - timedelta(days=30)).strftime('%d %B %Y') }}</div>
+                    <p>Overall a good product but with a few minor quality issues. The delivery was prompt and packaging was excellent. Would give it 3.5 stars if I could.</p>
+                    <div class="text-muted small">45 people found this helpful</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Similar Products -->
+    <div class="amazon-product-detail mb-4">
+        <h2 class="mb-3">Similar products you might like</h2>
+        <div class="row">
+            {% for product_id in range(product.id + 1, product.id + 7) %}
+                {% set sim_product = get_product(product_id) %}
+                {% if sim_product and sim_product.category == product.category %}
+                    <div class="col-6 col-md-4 col-lg-2 mb-3">
+                        <div class="amazon-carousel-card">
+                            <a href="{{ url_for('product_detail', product_id=sim_product.id) }}">
+                                {% if sim_product.images %}
+                                    <img src="{{ sim_product.images[0] }}" class="amazon-carousel-image" alt="{{ sim_product.title }}"
+                                         onerror="this.src='https://dummyimage.com/150x150/000/fff.jpg&text=No+Image'">
+                                {% else %}
+                                    <img src="https://dummyimage.com/150x150/000/fff.jpg&text=No+Image" class="amazon-carousel-image" 
+                                         alt="{{ sim_product.title }}">
+                                {% endif %}
+                                <div class="mt-2">
+                                    <div class="amazon-product-title">{{ sim_product.title }}</div>
+                                    <div class="amazon-product-rating">
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="far fa-star text-warning"></i>
+                                    </div>
+                                    <div class="amazon-product-price">₹{{ sim_product.bazaar_price|int }}</div>
+                                    {% if sim_product.original_price and sim_product.bazaar_price < sim_product.original_price %}
+                                        <div class="amazon-product-original-price">₹{{ sim_product.original_price|int }}</div>
+                                    {% endif %}
+                                    <div class="amazon-prime">
+                                        <i class="fas fa-check"></i> Prime
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Image thumbnail functionality
+        const thumbnails = document.querySelectorAll(".amazon-thumbnail");
+        const mainImage = document.getElementById("mainImage");
+        
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener("click", function() {
+                // Update main image
+                mainImage.src = this.dataset.image;
+                
+                // Toggle active class
+                thumbnails.forEach(t => t.classList.remove("active"));
+                this.classList.add("active");
+            });
+        });
+        
+        // Quantity selection functionality
+        const quantitySelect = document.getElementById("quantity");
+        const hiddenQuantity = document.getElementById("hidden_quantity");
+        
+        quantitySelect.addEventListener("change", function() {
+            hiddenQuantity.value = this.value;
+        });
+    });
+</script>
+{% endblock %}

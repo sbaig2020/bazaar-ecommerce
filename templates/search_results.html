@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results for "{{ query }}" - Bazaar{% endblock %}
+
+{% block content %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1>Search Results</h1>
+            <p class="lead">
+                {% if results %}
+                    Found {{ results|length }} result{% if results|length != 1 %}s{% endif %} for "{{ query }}"
+                {% else %}
+                    No results found for "{{ query }}"
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Search Results -->
+    {% if results %}
+        <div class="row">
+            {% for product in results %}
+                <div class="col-6 col-md-3 mb-4">
+                    <div class="card h-100 product-card">
+                        <a href="{{ url_for('product_detail', product_id=product.id) }}">
+                            {% if product.images %}
+                                <img src="{{ product.images[0] }}" class="card-img-top" alt="{{ product.title }}" onerror="this.src='https://dummyimage.com/300x300/000/fff.jpg&text=No+Image'">
+                            {% else %}
+                                <img src="https://dummyimage.com/300x300/000/fff.jpg&text=No+Image" class="card-img-top" alt="{{ product.title }}">
+                            {% endif %}
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title product-title">{{ product.title }}</h5>
+                            <p class="card-text brand-name">{{ product.brand }}</p>
+                            <p class="card-text price">₹{{ product.bazaar_price|int }}</p>
+                        </div>
+                        <div class="card-footer bg-white">
+                            <div class="d-grid">
+                                <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn btn-sm btn-outline-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <h4 class="alert-heading">No results found!</h4>
+                    <p>We couldn't find any products matching your search query "{{ query }}".</p>
+                    <hr>
+                    <p class="mb-0">Try using different keywords or check out our <a href="{{ url_for('products') }}" class="alert-link">product catalog</a>.</p>
+                </div>
+                
+                <!-- Suggested Products -->
+                <div class="mt-4">
+                    <h3>You might like</h3>
+                    <div class="row">
+                        {% for i in range(4) %}
+                            <div class="col-6 col-md-3 mb-4">
+                                <div class="card h-100">
+                                    <img src="https://dummyimage.com/300x300/000/fff.jpg&text=Product+{{ i+1 }}" class="card-img-top" alt="Suggested product">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Suggested Product {{ i+1 }}</h5>
+                                        <p class="card-text">₹9999</p>
+                                    </div>
+                                    <div class="card-footer bg-white">
+                                        <div class="d-grid">
+                                            <a href="{{ url_for('products') }}" class="btn btn-sm btn-outline-primary">Browse Products</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    
+    <!-- Search Tips -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Search Tips</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="mb-0">
+                        <li>Make sure all words are spelled correctly</li>
+                        <li>Try using more general keywords</li>
+                        <li>Try searching by product category (e.g. "shoes", "men", "women")</li>
+                        <li>Try searching by brand name</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

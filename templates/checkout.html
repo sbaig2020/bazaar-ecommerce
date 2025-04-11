@@ -1,0 +1,350 @@
+{% extends "base.html" %}
+
+{% block title %}Bazaar - Checkout{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 mt-3 mb-5">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('cart') }}">Shopping Cart</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="amazon-checkout">
+                <h1>Checkout <span class="text-muted fs-6">({{ cart_items|length }} items)</span></h1>
+                
+                <!-- Step 1: Shipping Address -->
+                <div class="amazon-checkout-step">
+                    <div class="amazon-checkout-step-header">
+                        <div class="amazon-checkout-step-number">1</div>
+                        <div class="amazon-checkout-step-title">Shipping Address</div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="amazon-address-card selected">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="address" id="address1" checked>
+                                        <label class="form-check-label" for="address1">
+                                            <strong>John Doe</strong><br>
+                                            123 Main Street<br>
+                                            Mumbai, Maharashtra 400001<br>
+                                            India<br>
+                                            Phone: +91 98765 43210
+                                        </label>
+                                    </div>
+                                    <div class="mt-2">
+                                        <a href="#" class="me-3 amazon-see-more">Edit</a>
+                                        <a href="#" class="amazon-see-more">Remove</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="amazon-address-card">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="address" id="address2">
+                                        <label class="form-check-label" for="address2">
+                                            <strong>John Doe</strong><br>
+                                            456 Business Park<br>
+                                            Delhi, Delhi 110001<br>
+                                            India<br>
+                                            Phone: +91 98765 43210
+                                        </label>
+                                    </div>
+                                    <div class="mt-2">
+                                        <a href="#" class="me-3 amazon-see-more">Edit</a>
+                                        <a href="#" class="amazon-see-more">Remove</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-3">
+                                <div class="amazon-address-card">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-plus me-2"></i> Add a new address
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Delivery Options -->
+                <div class="amazon-checkout-step">
+                    <div class="amazon-checkout-step-header">
+                        <div class="amazon-checkout-step-number">2</div>
+                        <div class="amazon-checkout-step-title">Delivery Options</div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="amazon-delivery-option mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="delivery" id="express" checked>
+                                <label class="form-check-label d-flex justify-content-between w-100" for="express">
+                                    <div>
+                                        <strong>Express Delivery</strong><br>
+                                        <span class="text-success">Get it by Tomorrow, Apr 13</span>
+                                    </div>
+                                    <div class="text-end">
+                                        <strong>₹99</strong>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="amazon-delivery-option mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="delivery" id="standard">
+                                <label class="form-check-label d-flex justify-content-between w-100" for="standard">
+                                    <div>
+                                        <strong>Standard Delivery</strong><br>
+                                        <span>Get it by Monday, Apr 15</span>
+                                    </div>
+                                    <div class="text-end">
+                                        <strong>FREE</strong>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Payment Method -->
+                <div class="amazon-checkout-step">
+                    <div class="amazon-checkout-step-header">
+                        <div class="amazon-checkout-step-number">3</div>
+                        <div class="amazon-checkout-step-title">Payment Method</div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="amazon-payment-method selected">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="payment" id="card" checked>
+                                        <label class="form-check-label" for="card">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <img src="https://m.media-amazon.com/images/G/31/checkout/payselect/card-logos-small._CB485935554_.png" alt="Credit Card" height="24">
+                                                <span class="ms-2"><strong>Credit / Debit Card</strong></span>
+                                            </div>
+                                            <div>
+                                                VISA ending in 4242
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="amazon-payment-method">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="payment" id="upi">
+                                        <label class="form-check-label" for="upi">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <img src="https://m.media-amazon.com/images/G/31/payments-portal/r1/issuer-images/D_1_e._CB433757873_.gif" alt="UPI" height="24">
+                                                <span class="ms-2"><strong>UPI</strong></span>
+                                            </div>
+                                            <div>
+                                                Pay via UPI apps like PhonePe, Google Pay, etc.
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="amazon-payment-method">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="payment" id="netbanking">
+                                        <label class="form-check-label" for="netbanking">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <img src="https://m.media-amazon.com/images/G/31/checkout/payselect/netbanking-logos-small._CB485934747_.png" alt="Net Banking" height="24">
+                                                <span class="ms-2"><strong>Net Banking</strong></span>
+                                            </div>
+                                            <div>
+                                                All major banks available
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="amazon-payment-method">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="payment" id="cod">
+                                        <label class="form-check-label" for="cod">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fas fa-money-bill-wave me-2"></i>
+                                                <span><strong>Cash on Delivery</strong></span>
+                                            </div>
+                                            <div>
+                                                Pay when you receive
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="amazon-payment-method">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="payment" id="new-card">
+                                        <label class="form-check-label" for="new-card">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-plus me-2"></i> Add a new payment method
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 4: Review Items -->
+                <div class="amazon-checkout-step">
+                    <div class="amazon-checkout-step-header">
+                        <div class="amazon-checkout-step-number">4</div>
+                        <div class="amazon-checkout-step-title">Review Items and Delivery</div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="amazon-review-items">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <!-- Order Items -->
+                                    <div class="amazon-delivery-group mb-4">
+                                        <div class="mb-2">
+                                            <strong>Delivery: {{ 'Tomorrow, Apr 13' if cart_items else 'N/A' }}</strong>
+                                        </div>
+                                        
+                                        {% for item in cart_items %}
+                                        <div class="amazon-cart-item">
+                                            <div class="row">
+                                                <div class="col-3 col-md-2">
+                                                    {% if item.product.images %}
+                                                        <img src="{{ item.product.images[0] }}" class="img-fluid" alt="{{ item.product.title }}" onerror="this.src='https://dummyimage.com/100x100/000/fff.jpg&text=No+Image'">
+                                                    {% else %}
+                                                        <img src="https://dummyimage.com/100x100/000/fff.jpg&text=No+Image" class="img-fluid" alt="{{ item.product.title }}">
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-9 col-md-10">
+                                                    <h5 class="amazon-cart-item-title">{{ item.product.title }}</h5>
+                                                    <div class="text-danger">₹{{ item.product.bazaar_price|int }}</div>
+                                                    <div class="small text-muted">
+                                                        Qty: {{ item.quantity }}
+                                                        {% if item.size %}
+                                                            | Size: {{ item.size }}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="small">
+                                                        <span class="text-success">
+                                                            <i class="fas fa-check-circle"></i> Eligible for FREE Shipping
+                                                        </span>
+                                                    </div>
+                                                    <div class="amazon-prime small">
+                                                        <i class="fas fa-check"></i> Prime
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% else %}
+                                        <div class="alert alert-info">
+                                            Your cart is empty. <a href="{{ url_for('products') }}">Browse products</a>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Order Summary -->
+        <div class="col-md-4 col-lg-3 mt-4">
+            <div class="amazon-order-summary">
+                <div class="amazon-order-summary-header">
+                    <button id="place-order-btn" class="btn amazon-place-order-btn mb-3">Place your order</button>
+                    <div class="small text-center mb-3">
+                        By placing your order, you agree to Bazaar's <a href="#">privacy policy</a> and <a href="#">conditions of use</a>.
+                    </div>
+                </div>
+                <div class="amazon-order-summary-row">
+                    <div>Items ({{ cart_items|length }}):</div>
+                    <div>₹{{ (cart_total or 0)|int }}</div>
+                </div>
+                <div class="amazon-order-summary-row">
+                    <div>Shipping:</div>
+                    <div>₹99</div>
+                </div>
+                <div class="amazon-order-summary-row">
+                    <div>Tax:</div>
+                    <div>₹{{ ((cart_total or 0) * 0.18)|int }}</div>
+                </div>
+                <hr>
+                <div class="amazon-order-summary-row amazon-order-summary-total">
+                    <div>Order Total:</div>
+                    <div>₹{{ ((cart_total or 0) + 99 + ((cart_total or 0) * 0.18))|int }}</div>
+                </div>
+                
+                {% if cart_items %}
+                <hr>
+                <div class="amazon-order-summary-row">
+                    <div class="small">
+                        <a href="#" data-bs-toggle="collapse" data-bs-target="#promo-code-form">Add a gift card or promotion code</a>
+                    </div>
+                </div>
+                <div class="collapse" id="promo-code-form">
+                    <div class="input-group mt-2">
+                        <input type="text" class="form-control form-control-sm" placeholder="Enter code">
+                        <button class="btn btn-sm btn-outline-secondary" type="button">Apply</button>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle place order button click
+        document.getElementById('place-order-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Show success message (in a real app, this would submit an order)
+            alert('Thank you for your order! Your order has been placed successfully.');
+            
+            // Redirect to home page after 1 second
+            setTimeout(function() {
+                window.location.href = "{{ url_for('home') }}";
+            }, 1000);
+        });
+        
+        // Handle radio button changes for address
+        document.querySelectorAll('input[name="address"]').forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                document.querySelectorAll('.amazon-address-card').forEach(function(card) {
+                    card.classList.remove('selected');
+                });
+                this.closest('.amazon-address-card').classList.add('selected');
+            });
+        });
+        
+        // Handle radio button changes for payment method
+        document.querySelectorAll('input[name="payment"]').forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                document.querySelectorAll('.amazon-payment-method').forEach(function(method) {
+                    method.classList.remove('selected');
+                });
+                this.closest('.amazon-payment-method').classList.add('selected');
+            });
+        });
+    });
+</script>
+{% endblock %}

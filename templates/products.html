@@ -1,0 +1,361 @@
+{% extends "base.html" %}
+
+{% block title %}{{ category|capitalize if category else 'All' }} Products | Bazaar{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 mt-3">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="small mb-2">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+            {% if category %}
+                <li class="breadcrumb-item active" aria-current="page">{{ category|capitalize }}</li>
+            {% else %}
+                <li class="breadcrumb-item active" aria-current="page">All Products</li>
+            {% endif %}
+        </ol>
+    </nav>
+    
+    <div class="row">
+        <!-- Filters Sidebar -->
+        <div class="col-12 col-md-3 mb-3">
+            <div class="amazon-filter-sidebar">
+                <div class="amazon-filter-heading">Filter Results</div>
+                
+                <div class="amazon-filter-group">
+                    <div class="amazon-filter-group-title">Department</div>
+                    <div class="form-check amazon-filter-checkbox">
+                        <input class="form-check-input" type="checkbox" value="men" id="menCheckbox" {% if category == 'men' %}checked{% endif %}>
+                        <label class="form-check-label" for="menCheckbox">
+                            Men
+                        </label>
+                    </div>
+                    <div class="form-check amazon-filter-checkbox">
+                        <input class="form-check-input" type="checkbox" value="women" id="womenCheckbox" {% if category == 'women' %}checked{% endif %}>
+                        <label class="form-check-label" for="womenCheckbox">
+                            Women
+                        </label>
+                    </div>
+                    <div class="form-check amazon-filter-checkbox">
+                        <input class="form-check-input" type="checkbox" value="kids" id="kidsCheckbox" {% if category == 'kids' %}checked{% endif %}>
+                        <label class="form-check-label" for="kidsCheckbox">
+                            Kids
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="amazon-filter-group">
+                    <div class="amazon-filter-group-title">Customer Review</div>
+                    <div class="form-check amazon-filter-checkbox">
+                        <input class="form-check-input" type="checkbox" value="4stars" id="4starsCheckbox">
+                        <label class="form-check-label" for="4starsCheckbox">
+                            <span class="text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </span> & Up
+                        </label>
+                    </div>
+                    <div class="form-check amazon-filter-checkbox">
+                        <input class="form-check-input" type="checkbox" value="3stars" id="3starsCheckbox">
+                        <label class="form-check-label" for="3starsCheckbox">
+                            <span class="text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </span> & Up
+                        </label>
+                    </div>
+                    <div class="form-check amazon-filter-checkbox">
+                        <input class="form-check-input" type="checkbox" value="2stars" id="2starsCheckbox">
+                        <label class="form-check-label" for="2starsCheckbox">
+                            <span class="text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </span> & Up
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="amazon-filter-group">
+                    <div class="amazon-filter-group-title">Price</div>
+                    <div class="form-check amazon-filter-checkbox">
+                        <input class="form-check-input" type="checkbox" value="under1000" id="under1000Checkbox">
+                        <label class="form-check-label" for="under1000Checkbox">
+                            Under ₹1,000
+                        </label>
+                    </div>
+                    <div class="form-check amazon-filter-checkbox">
+                        <input class="form-check-input" type="checkbox" value="1000to2500" id="1000to2500Checkbox">
+                        <label class="form-check-label" for="1000to2500Checkbox">
+                            ₹1,000 to ₹2,500
+                        </label>
+                    </div>
+                    <div class="form-check amazon-filter-checkbox">
+                        <input class="form-check-input" type="checkbox" value="2500to5000" id="2500to5000Checkbox">
+                        <label class="form-check-label" for="2500to5000Checkbox">
+                            ₹2,500 to ₹5,000
+                        </label>
+                    </div>
+                    <div class="form-check amazon-filter-checkbox">
+                        <input class="form-check-input" type="checkbox" value="5000plus" id="5000plusCheckbox">
+                        <label class="form-check-label" for="5000plusCheckbox">
+                            Over ₹5,000
+                        </label>
+                    </div>
+                    <div class="mt-2">
+                        <div class="row g-2">
+                            <div class="col">
+                                <input type="number" class="form-control form-control-sm" placeholder="₹ Min">
+                            </div>
+                            <div class="col-auto pt-1">-</div>
+                            <div class="col">
+                                <input type="number" class="form-control form-control-sm" placeholder="₹ Max">
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-sm btn-outline-secondary">Go</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="amazon-filter-group">
+                    <div class="amazon-filter-group-title">Brand</div>
+                    {% set brands = [] %}
+                    {% for product in products %}
+                        {% if product.brand not in brands %}
+                            {% set brands = brands + [product.brand] %}
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% for brand in brands[:6] %}
+                        <div class="form-check amazon-filter-checkbox">
+                            <input class="form-check-input" type="checkbox" value="{{ brand }}" id="{{ brand|replace(' ', '') }}Checkbox">
+                            <label class="form-check-label" for="{{ brand|replace(' ', '') }}Checkbox">
+                                {{ brand }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                    
+                    {% if brands|length > 6 %}
+                        <a href="#" class="small text-decoration-none">See more</a>
+                    {% endif %}
+                </div>
+                
+                <div class="amazon-filter-group">
+                    <div class="amazon-filter-group-title">Deals & Discounts</div>
+                    <div class="form-check amazon-filter-checkbox">
+                        <input class="form-check-input" type="checkbox" value="todaysDeals" id="todaysDealsCheckbox">
+                        <label class="form-check-label" for="todaysDealsCheckbox">
+                            Today's Deals
+                        </label>
+                    </div>
+                    <div class="form-check amazon-filter-checkbox">
+                        <input class="form-check-input" type="checkbox" value="discount10" id="discount10Checkbox">
+                        <label class="form-check-label" for="discount10Checkbox">
+                            10% Off or more
+                        </label>
+                    </div>
+                    <div class="form-check amazon-filter-checkbox">
+                        <input class="form-check-input" type="checkbox" value="discount25" id="discount25Checkbox">
+                        <label class="form-check-label" for="discount25Checkbox">
+                            25% Off or more
+                        </label>
+                    </div>
+                    <div class="form-check amazon-filter-checkbox">
+                        <input class="form-check-input" type="checkbox" value="discount50" id="discount50Checkbox">
+                        <label class="form-check-label" for="discount50Checkbox">
+                            50% Off or more
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Products Results -->
+        <div class="col-12 col-md-9">
+            <div class="amazon-search-results">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="amazon-search-results-header">
+                        {{ category|capitalize if category else 'All' }} Products
+                        <div class="amazon-search-count">{{ products|length }} results</div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="small me-2">Sort by:</span>
+                        <select class="form-select form-select-sm amazon-sort-dropdown">
+                            <option selected>Featured</option>
+                            <option>Price: Low to High</option>
+                            <option>Price: High to Low</option>
+                            <option>Avg. Customer Review</option>
+                            <option>Newest Arrivals</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Featured Deal -->
+                {% if products|length > 0 %}
+                <div class="border-bottom pb-3 mb-3">
+                    <div class="badge bg-danger mb-2">Deal of the Day</div>
+                    <div class="row">
+                        <div class="col-12 col-md-3">
+                            <a href="{{ url_for('product_detail', product_id=products[0].id) }}">
+                                {% if products[0].images %}
+                                    <img src="{{ products[0].images[0] }}" class="img-fluid" alt="{{ products[0].title }}" onerror="this.src='https://dummyimage.com/200x200/000/fff.jpg&text=No+Image'">
+                                {% else %}
+                                    <img src="https://dummyimage.com/200x200/000/fff.jpg&text=No+Image" class="img-fluid" alt="{{ products[0].title }}">
+                                {% endif %}
+                            </a>
+                        </div>
+                        <div class="col-12 col-md-9">
+                            <div class="amazon-product-detail-title mb-2">
+                                <a href="{{ url_for('product_detail', product_id=products[0].id) }}" class="text-dark text-decoration-none">
+                                    {{ products[0].title }}
+                                </a>
+                            </div>
+                            <div class="amazon-product-rating mb-2">
+                                <span class="text-warning">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </span>
+                                <a href="#" class="ms-1">1,245 ratings</a>
+                            </div>
+                            <div class="mb-2">
+                                <span class="amazon-product-detail-price">₹{{ products[0].bazaar_price|int }}</span>
+                                {% if products[0].original_price and products[0].bazaar_price < products[0].original_price %}
+                                    <span class="amazon-product-detail-original ms-2">₹{{ products[0].original_price|int }}</span>
+                                    <span class="text-success ms-2">
+                                        Save ₹{{ (products[0].original_price - products[0].bazaar_price)|int }} ({{ ((products[0].original_price - products[0].bazaar_price) / products[0].original_price * 100)|round|int }}%)
+                                    </span>
+                                {% endif %}
+                            </div>
+                            <div class="amazon-prime mb-3">
+                                <i class="fas fa-check"></i> Prime - FREE delivery
+                            </div>
+                            <p class="mb-2">{{ products[0].description|truncate(200) }}</p>
+                            <div class="d-flex">
+                                <a href="{{ url_for('product_detail', product_id=products[0].id) }}" class="btn btn-sm amazon-add-to-cart-btn me-2" style="width: auto; padding-left: 20px; padding-right: 20px;">
+                                    See Deal
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Product Grid -->
+                <div class="amazon-products-grid">
+                    {% for product in products %}
+                        <div class="amazon-product-card">
+                            <a href="{{ url_for('product_detail', product_id=product.id) }}" class="text-decoration-none">
+                                {% if product.images %}
+                                    <img src="{{ product.images[0] }}" class="amazon-product-image mb-2" alt="{{ product.title }}" onerror="this.src='https://dummyimage.com/200x200/000/fff.jpg&text=No+Image'">
+                                {% else %}
+                                    <img src="https://dummyimage.com/200x200/000/fff.jpg&text=No+Image" class="amazon-product-image mb-2" alt="{{ product.title }}">
+                                {% endif %}
+                                <div class="amazon-product-title">{{ product.title }}</div>
+                                <div class="amazon-product-rating">
+                                    <span class="text-warning">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </span>
+                                    <span class="small ms-1 text-muted">({{ range(100, 2000)|random }})</span>
+                                </div>
+                                <div class="amazon-product-price">₹{{ product.bazaar_price|int }}</div>
+                                {% if product.original_price and product.bazaar_price < product.original_price %}
+                                    <div class="amazon-product-original-price">₹{{ product.original_price|int }}</div>
+                                {% endif %}
+                                <div class="amazon-prime">
+                                    <i class="fas fa-check"></i> Prime
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Pagination -->
+                <div class="amazon-pagination">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            
+            <!-- Recently Viewed Items -->
+            <div class="amazon-carousel mt-3">
+                <h2>Your Browsing History <a href="#" class="btn btn-sm btn-outline-secondary float-end">View & Edit</a></h2>
+                <div class="row">
+                    {% for product in products[:6]|reverse %}
+                        <div class="col-6 col-md-4 col-lg-2 mb-3">
+                            <div class="amazon-carousel-card">
+                                <a href="{{ url_for('product_detail', product_id=product.id) }}">
+                                    {% if product.images %}
+                                        <img src="{{ product.images[0] }}" class="amazon-carousel-image" alt="{{ product.title }}" onerror="this.src='https://dummyimage.com/150x150/000/fff.jpg&text=No+Image'">
+                                    {% else %}
+                                        <img src="https://dummyimage.com/150x150/000/fff.jpg&text=No+Image" class="amazon-carousel-image" alt="{{ product.title }}">
+                                    {% endif %}
+                                    <div class="mt-2">
+                                        <div class="amazon-product-title">{{ product.title }}</div>
+                                        <div class="amazon-product-price">₹{{ product.bazaar_price|int }}</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Filter functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkboxes = document.querySelectorAll('.amazon-filter-checkbox input');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if (this.id === 'menCheckbox' && this.checked) {
+                    window.location.href = "{{ url_for('products', category='men') }}";
+                } else if (this.id === 'womenCheckbox' && this.checked) {
+                    window.location.href = "{{ url_for('products', category='women') }}";
+                } else if (this.id === 'kidsCheckbox' && this.checked) {
+                    window.location.href = "{{ url_for('products', category='kids') }}";
+                }
+            });
+        });
+        
+        // Sort dropdown functionality
+        const sortDropdown = document.querySelector('.amazon-sort-dropdown');
+        if (sortDropdown) {
+            sortDropdown.addEventListener('change', function() {
+                // Implementation for sorting would go here
+                console.log('Sort changed to:', this.value);
+            });
+        }
+    });
+</script>
+{% endblock %}

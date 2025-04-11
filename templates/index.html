@@ -1,0 +1,341 @@
+{% extends "base.html" %}
+
+{% block title %}Bazaar - Online Shopping for Shoes, Clothing & More{% endblock %}
+
+{% block content %}
+    <!-- Hero Banner Carousel -->
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://m.media-amazon.com/images/I/61TD5JLGhIL._SX3000_.jpg" class="d-block w-100" alt="Bazaar Banner">
+            </div>
+            <div class="carousel-item">
+                <img src="https://m.media-amazon.com/images/I/61jovjd+f9L._SX3000_.jpg" class="d-block w-100" alt="Fashion Sale">
+            </div>
+            <div class="carousel-item">
+                <img src="https://m.media-amazon.com/images/I/61DUO0NqyyL._SX3000_.jpg" class="d-block w-100" alt="New Arrivals">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <!-- Main Content with Cards Grid -->
+    <div class="container-fluid px-3 px-md-4 mt-3">
+        <div class="row">
+            <!-- Men's Fashion Card -->
+            <div class="col-12 col-sm-6 col-lg-3 mb-3">
+                <div class="amazon-card">
+                    <h2>Men's Fashion</h2>
+                    <div class="amazon-card-grid">
+                        {% if categories and categories.men %}
+                            {% for product in categories.men[:4] %}
+                                <div class="amazon-card-grid-item">
+                                    <a href="{{ url_for('product_detail', product_id=product.id) }}">
+                                        {% if product.images %}
+                                            <img src="{{ product.images[0] }}" alt="{{ product.title }}" onerror="this.src='https://dummyimage.com/150x150/000/fff.jpg&text=No+Image'">
+                                        {% else %}
+                                            <img src="https://dummyimage.com/150x150/000/fff.jpg&text=No+Image" alt="{{ product.title }}">
+                                        {% endif %}
+                                        <p>{{ product.title|truncate(30) }}</p>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="amazon-card-grid-item">
+                                <img src="https://dummyimage.com/150x150/000/fff.jpg&text=Men+Fashion" alt="Men's Fashion">
+                                <p>Men's Fashion</p>
+                            </div>
+                            <div class="amazon-card-grid-item">
+                                <img src="https://dummyimage.com/150x150/000/fff.jpg&text=Men+Shoes" alt="Men's Shoes">
+                                <p>Men's Shoes</p>
+                            </div>
+                            <div class="amazon-card-grid-item">
+                                <img src="https://dummyimage.com/150x150/000/fff.jpg&text=Men+Accessories" alt="Men's Accessories">
+                                <p>Men's Accessories</p>
+                            </div>
+                            <div class="amazon-card-grid-item">
+                                <img src="https://dummyimage.com/150x150/000/fff.jpg&text=Men+Outerwear" alt="Men's Outerwear">
+                                <p>Men's Outerwear</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <a href="{{ url_for('products', category='men') }}" class="amazon-see-more">See more</a>
+                </div>
+            </div>
+            
+            <!-- Women's Fashion Card -->
+            <div class="col-12 col-sm-6 col-lg-3 mb-3">
+                <div class="amazon-card">
+                    <h2>Women's Fashion</h2>
+                    <div class="amazon-card-grid">
+                        {% if categories and categories.women %}
+                            {% for product in categories.women[:4] %}
+                                <div class="amazon-card-grid-item">
+                                    <a href="{{ url_for('product_detail', product_id=product.id) }}">
+                                        {% if product.images %}
+                                            <img src="{{ product.images[0] }}" alt="{{ product.title }}" onerror="this.src='https://dummyimage.com/150x150/000/fff.jpg&text=No+Image'">
+                                        {% else %}
+                                            <img src="https://dummyimage.com/150x150/000/fff.jpg&text=No+Image" alt="{{ product.title }}">
+                                        {% endif %}
+                                        <p>{{ product.title|truncate(30) }}</p>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="amazon-card-grid-item">
+                                <img src="https://dummyimage.com/150x150/000/fff.jpg&text=Women+Fashion" alt="Women's Fashion">
+                                <p>Women's Fashion</p>
+                            </div>
+                            <div class="amazon-card-grid-item">
+                                <img src="https://dummyimage.com/150x150/000/fff.jpg&text=Women+Shoes" alt="Women's Shoes">
+                                <p>Women's Shoes</p>
+                            </div>
+                            <div class="amazon-card-grid-item">
+                                <img src="https://dummyimage.com/150x150/000/fff.jpg&text=Women+Accessories" alt="Women's Accessories">
+                                <p>Women's Accessories</p>
+                            </div>
+                            <div class="amazon-card-grid-item">
+                                <img src="https://dummyimage.com/150x150/000/fff.jpg&text=Women+Outerwear" alt="Women's Outerwear">
+                                <p>Women's Outerwear</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <a href="{{ url_for('products', category='women') }}" class="amazon-see-more">See more</a>
+                </div>
+            </div>
+            
+            <!-- Kids' Fashion Card -->
+            <div class="col-12 col-sm-6 col-lg-3 mb-3">
+                <div class="amazon-card">
+                    <h2>Kids' Fashion</h2>
+                    <div class="amazon-card-grid">
+                        {% if categories and categories.kids %}
+                            {% for product in categories.kids[:4] %}
+                                <div class="amazon-card-grid-item">
+                                    <a href="{{ url_for('product_detail', product_id=product.id) }}">
+                                        {% if product.images %}
+                                            <img src="{{ product.images[0] }}" alt="{{ product.title }}" onerror="this.src='https://dummyimage.com/150x150/000/fff.jpg&text=No+Image'">
+                                        {% else %}
+                                            <img src="https://dummyimage.com/150x150/000/fff.jpg&text=No+Image" alt="{{ product.title }}">
+                                        {% endif %}
+                                        <p>{{ product.title|truncate(30) }}</p>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="amazon-card-grid-item">
+                                <img src="https://dummyimage.com/150x150/000/fff.jpg&text=Kids+Fashion" alt="Kids' Fashion">
+                                <p>Kids' Fashion</p>
+                            </div>
+                            <div class="amazon-card-grid-item">
+                                <img src="https://dummyimage.com/150x150/000/fff.jpg&text=Kids+Shoes" alt="Kids' Shoes">
+                                <p>Kids' Shoes</p>
+                            </div>
+                            <div class="amazon-card-grid-item">
+                                <img src="https://dummyimage.com/150x150/000/fff.jpg&text=Kids+Accessories" alt="Kids' Accessories">
+                                <p>Kids' Accessories</p>
+                            </div>
+                            <div class="amazon-card-grid-item">
+                                <img src="https://dummyimage.com/150x150/000/fff.jpg&text=Kids+Outerwear" alt="Kids' Outerwear">
+                                <p>Kids' Outerwear</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <a href="{{ url_for('products', category='kids') }}" class="amazon-see-more">See more</a>
+                </div>
+            </div>
+            
+            <!-- Sign In Card -->
+            <div class="col-12 col-sm-6 col-lg-3 mb-3">
+                <div class="amazon-card">
+                    <h2>Sign in for the best experience</h2>
+                    <div class="d-grid mb-3">
+                        <a href="#" class="btn btn-warning">Sign in securely</a>
+                    </div>
+                    <div class="text-center">
+                        <img src="https://images-na.ssl-images-amazon.com/images/G/01/x-locale/cs/help/images/gateway/self-service/fshub/fshub_sign_in_card._CB657833355_.png" alt="Sign in securely" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product Carousel -->
+        <div class="amazon-carousel">
+            <h2>Recommended based on your shopping trends</h2>
+            <div class="row">
+                {% if featured_products %}
+                    {% for product in featured_products[:6] %}
+                        <div class="col-6 col-md-4 col-lg-2 mb-3">
+                            <div class="amazon-carousel-card">
+                                <a href="{{ url_for('product_detail', product_id=product.id) }}">
+                                    {% if product.images %}
+                                        <img src="{{ product.images[0] }}" class="amazon-carousel-image" alt="{{ product.title }}" onerror="this.src='https://dummyimage.com/150x150/000/fff.jpg&text=No+Image'">
+                                    {% else %}
+                                        <img src="https://dummyimage.com/150x150/000/fff.jpg&text=No+Image" class="amazon-carousel-image" alt="{{ product.title }}">
+                                    {% endif %}
+                                    <div class="mt-2">
+                                        <div class="amazon-product-title">{{ product.title }}</div>
+                                        <div class="amazon-product-rating">
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star-half-alt text-warning"></i>
+                                        </div>
+                                        <div class="amazon-product-price">₹{{ product.bazaar_price|int }}</div>
+                                        {% if product.original_price and product.bazaar_price < product.original_price %}
+                                            <div class="amazon-product-original-price">₹{{ product.original_price|int }}</div>
+                                        {% endif %}
+                                        <div class="amazon-prime">
+                                            <i class="fas fa-check"></i> Prime
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12 text-center">
+                        <p>No recommended products available.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Second Row of Cards -->
+        <div class="row">
+            <!-- Best Sellers Card -->
+            <div class="col-12 col-sm-6 col-lg-3 mb-3">
+                <div class="amazon-card">
+                    <h2>Best Sellers</h2>
+                    <div class="text-center mb-3">
+                        <img src="https://m.media-amazon.com/images/I/41F+weU9Z+L._AC_SY230_.jpg" alt="Best Sellers" style="height: 200px; object-fit: contain;">
+                    </div>
+                    <a href="{{ url_for('products') }}" class="amazon-see-more">See more</a>
+                </div>
+            </div>
+            
+            <!-- Top Deal Card -->
+            <div class="col-12 col-sm-6 col-lg-3 mb-3">
+                <div class="amazon-card">
+                    <h2>Top Deal</h2>
+                    <div class="text-center mb-2">
+                        <div class="badge bg-danger mb-2">Up to 40% off</div>
+                        <img src="https://m.media-amazon.com/images/I/41tIRVkY1CL._AC_SY230_.jpg" alt="Deal of the Day" style="height: 180px; object-fit: contain;">
+                        <div class="mt-2">Limited time deal</div>
+                    </div>
+                    <a href="{{ url_for('products') }}" class="amazon-see-more">See all deals</a>
+                </div>
+            </div>
+            
+            <!-- New Arrivals Card -->
+            <div class="col-12 col-sm-6 col-lg-3 mb-3">
+                <div class="amazon-card">
+                    <h2>New Arrivals</h2>
+                    <div class="amazon-card-grid">
+                        <div class="amazon-card-grid-item">
+                            <img src="https://m.media-amazon.com/images/I/81-B-HnrIoL._AC_UL320_.jpg" alt="New Arrival">
+                            <p>New Collection</p>
+                        </div>
+                        <div class="amazon-card-grid-item">
+                            <img src="https://m.media-amazon.com/images/I/71icKEbZqEL._AC_UL320_.jpg" alt="New Arrival">
+                            <p>Trending Now</p>
+                        </div>
+                        <div class="amazon-card-grid-item">
+                            <img src="https://m.media-amazon.com/images/I/71+dk2I6qeL._AC_UL320_.jpg" alt="New Arrival">
+                            <p>Just Launched</p>
+                        </div>
+                        <div class="amazon-card-grid-item">
+                            <img src="https://m.media-amazon.com/images/I/81EHXT0z1iL._AC_UL320_.jpg" alt="New Arrival">
+                            <p>Coming Soon</p>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('products') }}" class="amazon-see-more">Explore more</a>
+                </div>
+            </div>
+            
+            <!-- Popular Categories Card -->
+            <div class="col-12 col-sm-6 col-lg-3 mb-3">
+                <div class="amazon-card">
+                    <h2>Popular Categories</h2>
+                    <div class="amazon-card-grid">
+                        <div class="amazon-card-grid-item">
+                            <a href="{{ url_for('products', category='men') }}">
+                                <img src="https://m.media-amazon.com/images/I/71MR-BWoQIL._AC_UL320_.jpg" alt="Men's Shoes">
+                                <p>Men's Shoes</p>
+                            </a>
+                        </div>
+                        <div class="amazon-card-grid-item">
+                            <a href="{{ url_for('products', category='women') }}">
+                                <img src="https://m.media-amazon.com/images/I/71yhoZP0l6L._AC_UL320_.jpg" alt="Women's Shoes">
+                                <p>Women's Shoes</p>
+                            </a>
+                        </div>
+                        <div class="amazon-card-grid-item">
+                            <a href="{{ url_for('products', category='men') }}">
+                                <img src="https://m.media-amazon.com/images/I/81j+0RI9GLL._AC_UL320_.jpg" alt="Men's Fashion">
+                                <p>Men's Fashion</p>
+                            </a>
+                        </div>
+                        <div class="amazon-card-grid-item">
+                            <a href="{{ url_for('products', category='women') }}">
+                                <img src="https://m.media-amazon.com/images/I/61IqxVm9acL._AC_UL320_.jpg" alt="Women's Fashion">
+                                <p>Women's Fashion</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recently Viewed Items -->
+        <div class="amazon-carousel">
+            <h2>Your Browsing History <a href="#" class="btn btn-sm btn-outline-secondary float-end">View & Edit</a></h2>
+            <div class="row">
+                {% if featured_products %}
+                    {% for product in featured_products[:6]|reverse %}
+                        <div class="col-6 col-md-4 col-lg-2 mb-3">
+                            <div class="amazon-carousel-card">
+                                <a href="{{ url_for('product_detail', product_id=product.id) }}">
+                                    {% if product.images %}
+                                        <img src="{{ product.images[0] }}" class="amazon-carousel-image" alt="{{ product.title }}" onerror="this.src='https://dummyimage.com/150x150/000/fff.jpg&text=No+Image'">
+                                    {% else %}
+                                        <img src="https://dummyimage.com/150x150/000/fff.jpg&text=No+Image" class="amazon-carousel-image" alt="{{ product.title }}">
+                                    {% endif %}
+                                    <div class="mt-2">
+                                        <div class="amazon-product-title">{{ product.title }}</div>
+                                        <div class="amazon-product-price">₹{{ product.bazaar_price|int }}</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12 text-center">
+                        <p>No browsing history available.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize carousel with custom settings
+    document.addEventListener("DOMContentLoaded", function() {
+        var heroCarousel = document.getElementById('heroCarousel');
+        var carousel = new bootstrap.Carousel(heroCarousel, {
+            interval: 5000,
+            wrap: true
+        });
+    });
+</script>
+{% endblock %}
