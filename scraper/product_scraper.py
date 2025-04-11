@@ -13,9 +13,9 @@ class BazaarConfig:
     
     # Categories to include in the Bazaar store
     CATEGORIES = [
-        {"url": "https://en-ae.sssports.com/kids/shoes", "category": "kids"},
-        {"url": "https://en-ae.sssports.com/mens/shoes", "category": "men"},
-        {"url": "https://en-ae.sssports.com/womens/shoes", "category": "women"}
+        {"enter link"},
+        {"enter link"},
+        {"enter link"}
     ]
     
     # Output directory for product data
